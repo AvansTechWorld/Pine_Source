@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: pine
+    runtime: static
+    buildCommand: npm run build
+    staticPublishPath: dist
+    routes:
+      # SPA fallback so client-side routing (and PWA navigation) works on refresh/deep links.
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
