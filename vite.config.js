@@ -2,7 +2,14 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
+// GitHub Pages serves this app from a sub-path (https://<user>.github.io/Pine_Source/),
+// not the domain root, so every absolute asset/URL reference needs this prefix.
+// If you ever move to a host that serves from the root (Render, a custom domain, etc.),
+// change this back to "/".
+const BASE_PATH = "/Pine_Source/";
+
 export default defineConfig({
+  base: BASE_PATH,
   plugins: [
     react(),
     VitePWA({
@@ -13,8 +20,8 @@ export default defineConfig({
         short_name: "Pine",
         description: "A minimalist offline-first workout tracker.",
         display: "standalone",
-        start_url: "/",
-        scope: "/",
+        start_url: BASE_PATH,
+        scope: BASE_PATH,
         theme_color: "#0A0A0A",
         background_color: "#0A0A0A",
         icons: [
@@ -27,7 +34,7 @@ export default defineConfig({
       workbox: {
         // App shell (HTML/CSS/JS) precached automatically by the plugin (globPatterns default).
         globPatterns: ["**/*.{js,css,html,svg,woff2,png}"],
-        navigateFallback: "/index.html",
+        navigateFallback: BASE_PATH + "index.html",
         runtimeCaching: [
           {
             // Exercise images hosted on GitHub raw — cache-first with background refresh.
