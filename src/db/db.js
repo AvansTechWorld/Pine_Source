@@ -20,7 +20,10 @@ export async function seedExercisesIfNeeded() {
   const count = await db.exercises.count();
   if (count > 0) return count;
 
-  const res = await fetch("/data/exercises.json");
+  // import.meta.env.BASE_URL resolves to "/" on a root deploy (e.g. Render) or
+  // "/Pine_Source/" on GitHub Pages — either way this always points at the
+  // right place instead of assuming the app is hosted at a domain root.
+  const res = await fetch(`${import.meta.env.BASE_URL}data/exercises.json`);
   const exercises = await res.json();
   await db.exercises.bulkPut(exercises);
   return exercises.length;
